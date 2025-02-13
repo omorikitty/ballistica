@@ -1,0 +1,197 @@
+{
+ "Achievements": {
+  "Boom Goes the Dynamite": {
+   "Complete": false
+  },
+  "Boxer": {
+   "Complete": false
+  },
+  "Dual Wielding": {
+   "Complete": false
+  },
+  "Flawless Victory": {
+   "Complete": false
+  },
+  "Free Loader": {
+   "Complete": true
+  },
+  "Gold Miner": {
+   "Complete": false
+  },
+  "Got the Moves": {
+   "Complete": false
+  },
+  "In Control": {
+   "Complete": false
+  },
+  "Last Stand God": {
+   "Complete": false
+  },
+  "Last Stand Master": {
+   "Complete": false
+  },
+  "Last Stand Wizard": {
+   "Complete": false
+  },
+  "Mine Games": {
+   "Complete": false
+  },
+  "Off You Go Then": {
+   "Complete": false
+  },
+  "Onslaught God": {
+   "Complete": false
+  },
+  "Onslaught Master": {
+   "Complete": false
+  },
+  "Onslaught Training Victory": {
+   "Complete": false
+  },
+  "Onslaught Wizard": {
+   "Complete": false
+  },
+  "Precision Bombing": {
+   "Complete": false
+  },
+  "Pro Boxer": {
+   "Complete": false
+  },
+  "Pro Football Shutout": {
+   "Complete": false
+  },
+  "Pro Football Victory": {
+   "Complete": false
+  },
+  "Pro Onslaught Victory": {
+   "Complete": false
+  },
+  "Pro Runaround Victory": {
+   "Complete": false
+  },
+  "Rookie Football Shutout": {
+   "Complete": false
+  },
+  "Rookie Football Victory": {
+   "Complete": false
+  },
+  "Rookie Onslaught Victory": {
+   "Complete": false
+  },
+  "Runaround God": {
+   "Complete": false
+  },
+  "Runaround Master": {
+   "Complete": false
+  },
+  "Runaround Wizard": {
+   "Complete": false
+  },
+  "Sharing is Caring": {
+   "Complete": false
+  },
+  "Stayin' Alive": {
+   "Complete": false
+  },
+  "Super Mega Punch": {
+   "Complete": false
+  },
+  "Super Punch": {
+   "Complete": false
+  },
+  "TNT Terror": {
+   "Complete": false
+  },
+  "Team Player": {
+   "Complete": false
+  },
+  "The Great Wall": {
+   "Complete": false
+  },
+  "The Wall": {
+   "Complete": false
+  },
+  "Uber Football Shutout": {
+   "Complete": false
+  },
+  "Uber Football Victory": {
+   "Complete": false
+  },
+  "Uber Onslaught Victory": {
+   "Complete": false
+  },
+  "Uber Runaround Victory": {
+   "Complete": false
+  }
+ },
+ "Auto Account State": "Server",
+ "Auto Balance Teams": true,
+ "Campaigns": {},
+ "Default Player Profiles": {
+  "Client Input Device #1": "__account__",
+  "Client Input Device #2": "__account__"
+ },
+ "FFA Series Length": 24,
+ "Fleet Zone Ping Last Flush Time": 1739214711,
+ "Fleet Zone Pings": {
+  "prod": {
+   "atlanta.v4": 132.98433092623915,
+   "calgary.v4": 138.09636299993144,
+   "calgary.v6": 245.3702439997869,
+   "chicago.v4": 182.01958580332575,
+   "columbus.v4": 133.86672494834784,
+   "columbus.v6": 192.28784299734252,
+   "dallas.v4": 196.84622399386717,
+   "denver.v4": 170.95741362986155,
+   "houston.v4": 170.88926458031347,
+   "kansas_city.v4": 190.3288560594956,
+   "los_angeles.v4": 203.5698979998415,
+   "miami.v4": 70.61236808207056,
+   "minneapolis.v4": 165.40092710470344,
+   "montreal.v4": 163.6486390814389,
+   "montreal.v6": 212.50775316290674,
+   "n_virginia.v4": 140.23668710095808,
+   "n_virginia.v6": 183.3584986327478,
+   "new_york.v4": 243.0906524216407,
+   "oregon.v4": 180.94651399951545,
+   "oregon.v6": 128.93836500006728,
+   "phoenix.v4": 230.69986999689718,
+   "queretaro.v4": 187.92616329578595,
+   "san_jose.v4": 154.79090599910705,
+   "san_jose.v6": 206.26407000236213
+  }
+ },
+ "Free-for-All Playlist Randomize": true,
+ "Free-for-All Playlist Selection": "__default__",
+ "Free-for-All Playlists": {},
+ "Idle Exit Minutes": null,
+ "Local Account Name": "Server20599796",
+ "Player Profiles": {
+  "__account__": {
+   "character": "Spaz",
+   "color": [
+    0.5,
+    0.25,
+    1.0
+   ],
+   "highlight": [
+    0.5,
+    0.25,
+    1.0
+   ]
+  }
+ },
+ "Plugins": {
+  "setup.Startup": {
+   "enabled": true
+  }
+ },
+ "Port": 43210,
+ "Show Tutorial": false,
+ "Signed In Last Session": false,
+ "Team Tournament Playlists": {},
+ "Teams Series Length": 7,
+ "launchCount": 205,
+ "lc14173": 1,
+ "lc14292": 1
+}
