@@ -1,6 +1,5 @@
 # build/temp files
 Bin/
-build/
 build-server/
 autom4te.cache
 local.properties
