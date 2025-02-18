@@ -3,7 +3,7 @@
 import babase
 import bascenev1 as bs
 import logging
-from database.test import test_stats
+from database.test import test_stats, test_customer
 from bascenev1._activitytypes import ScoreScreenActivity
 from stats import mystats
 from myspaz import spazeffect

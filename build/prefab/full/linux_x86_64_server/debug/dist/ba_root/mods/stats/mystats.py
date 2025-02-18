@@ -3,15 +3,16 @@ import babase
 import os
 import time
 import threading
-from typing import Any, List, Dict
+from typing import Any, List
 
 from database.models.user import User
-from database.manager import StatsManager
+from database.managers.factory import ManagerFactory
 from dataclasses import asdict
 from pymongo import UpdateOne
 from efro.threadpool import ThreadPoolExecutorPlus
-from concurrent.futures import wait
 
+
+statsManager = ManagerFactory.get("stats")
 
 
 def earn(score: int, kills: int) -> int:
@@ -24,7 +25,6 @@ def earn(score: int, kills: int) -> int:
 
 
 def update(score_set):
-    stats = StatsManager()
     updates: dict[str, Any] = {}
 
     for p_entry in score_set.get_records().values():
@@ -36,9 +36,7 @@ def update(score_set):
         except Exception:
             continue
 
-
-        entry = User(**stats.get_stats(account_id))
-
+        entry = User(**statsManager.get_stats(account_id))
 
         entry.kills += p_entry.accum_kill_count
         entry.killed += p_entry.accum_killed_count
@@ -46,26 +44,22 @@ def update(score_set):
         entry.coins += earn(p_entry.accumscore, p_entry.accum_kill_count)
         entry.played += 1
 
-
         entry.character = p_entry.player.character
         entry.name = p_entry.getname(full=True)
         entry.ls = datetime.datetime.now().strftime("%d/%m/%Y, %H:%M:%S")
 
-
         entry.accounts = list(set(entry.accounts + [account_name]))
-
 
         updates[account_id] = asdict(entry)
 
-
     if updates:
-        UpdateThread(updates, stats).start()
+        UpdateThread(updates, statsManager).start()
 
 
 class UpdateThread(threading.Thread):
-    def __init__(self, updates: Dict[str, Any], stats: StatsManager):
+    def __init__(self, updates, manager):
         super().__init__()
-        self.stats = stats
+        self.stats = manager
         self.cache = self.stats.cache
         self.updates = updates
         self.bulk_updates: List[UpdateOne] = []
@@ -82,22 +76,27 @@ class UpdateThread(threading.Thread):
         for chunk in self.chunk_generator(self.bulk_updates, self.chunk_size):
             self.process_bulk_updates(chunk)
         print(f"took: {time.perf_counter()- start:.4}")
-    
 
     def process_entry(self, user_data):
         account_id, stats = user_data
+        self.bulk_updates.append(
+            UpdateOne({"_id": account_id}, {"$set": stats}, upsert=True)
+        )
         self.cache.update_from_cache(account_id, stats)
-        print(f"{self.cache.get_from_cache(account_id)}")
-        self.bulk_updates.append(UpdateOne({"_id": account_id}, {"$set": stats}, upsert=True))
+        print(f"({account_id}) -> {self.cache.get_from_cache(account_id)}")
 
-    def process_bulk_updates(self, bulk: List[UpdateOne]):
+    def process_bulk_updates(self, bulk):
         result = self.stats.update_from_bulk(bulk)
-        print(f"Se han actualizado ({len(bulk)}) jugadores" if result.modified_count > 0 else "No hubo actualizaciones")
+        print(
+            f"Se han actualizado ({len(bulk)}) jugadores"
+            if result.modified_count > 0
+            else "No hubo actualizaciones"
+        )
 
     @staticmethod
     def chunk_generator(items: List[Any], size: int):
         from itertools import islice
+
         itr = iter(items)
         while chunk := list(islice(itr, size)):
             yield chunk
-

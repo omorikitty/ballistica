@@ -1,67 +1,63 @@
 import babase
+import asyncio
 import bascenev1 as bs
 import bascenev1lib
 from bascenev1lib.actor.playerspaz import *
-from database.manager import InventoryPlayer
-from .effects import EFFECT_MAP
+from database.managers import ManagerFactory
+from myspaz.effects.interface import Effect
+from myspaz.effects import EffectFactory
 from typing import Sequence
 
 class EffectPlayerSpaz(PlayerSpaz):
-    def __init__(self,
-                 player: bs.Player,
-                 color: Sequence[float],
-                 highlight: Sequence[float],
-                 character: str,
-                 powerups_expire: bool = True,
-                 *args,
-                 **kwargs):
+    def __init__(
+        self,
+        player: bs.Player,
+        color: Sequence[float],
+        highlight: Sequence[float],
+        character: str,
+        powerups_expire: bool = True,
+        *args,
+        **kwargs,
+    ):
 
-        super().__init__(player=player,
-                         color=color,
-                         highlight=highlight,
-                         character=character,
-                         powerups_expire=powerups_expire,
-                         *args,
-                         **kwargs)
-        
-        self._activations = {}
-        account_id = player._sessionplayer.get_v1_account_id()
-        self.effects = InventoryPlayer(account_id)
-        bs.timer(10, babase.WeakCall(self.switchtag), True)
-        
-        self.apply_effect()
+        super().__init__(
+            player=player,
+            color=color,
+            highlight=highlight,
+            character=character,
+            powerups_expire=powerups_expire,
+            *args,
+            **kwargs,
+        )
+        self._active_effects: dict[str, Effect] = {}
+        self.account_id = player._sessionplayer.get_v1_account_id()
+        self.customer = ManagerFactory.get("customers")
+        self.inv = self.customer.getInventory(self.account_id)
+        self.customer.register(self.account_id, self)
+        self.timer = bs.timer(10, bs.WeakCall(self._change_tag_test), True)
 
-    def switchtag(self):
-        """ esto es solo un test para notar los cambios en tiempo real del juego"""
+    def _change_tag_test(self):
         import random
-        print("cambiando tag...")
-        nametag = ["zen", "hola", "test", "hello world"]
-        c = random.choice(nametag)
+        nametag = ["test", "change...", "hello", "noob"]
+        color = (random.random(), random.random(), random.random())
+        tag = random.choice(nametag)
+        self.customer.addEffect(self.account_id, "tag", 10, **{"tag": tag, "color": color})
 
-        self.effects.add_effect(effect="tag", duration=10, tag=c)
+    def apply(self):
+        for effect, data in self.inv.get("item", {}).items():
+            if effectclass := EffectFactory.create(effect, **data.get("custom", {})):
+                effectclass.apply(self)
+                self._active_effects[effect] = effectclass
+    
+    def on_expire(self) -> None:
+        self.customer.unregister(self.account_id)
+        super().on_expire()
 
-        if "tag" in self._activations:
-            self._activations["tag"].update_customization(tag=c)
-        else:
-            self.apply_effect()
-
-        print(f"tag cambiado a {c}")
-
-    def apply_effect(self):
-        effects = self.effects.inventory()
-        item = effects.get("item", {})
-        for effect_name, custom_data in item.items():
-            eff_cls = EFFECT_MAP.get(effect_name)
-            if not eff_cls:
-                continue
-            custom = custom_data.get("custom", {})
-            eff = eff_cls(**custom)
-            self._activations[effect_name] = eff
-            eff.apply(self)
             
-            
+
+        
 
 
 def apply():
-    print("aplicando efectos al jugador")
+    print("Inicializando clase para los efectos...")
     bascenev1lib.actor.playerspaz.PlayerSpaz = EffectPlayerSpaz
